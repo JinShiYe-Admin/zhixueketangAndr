@@ -1,18 +1,18 @@
 <!doctype html>
 <html>
 
-<head>
-	<meta charset="UTF-8">
-	<title></title>
-	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<link href="../../css/mui.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>-->
-	<style type="text/css">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
+		<!--<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>-->
+		<style type="text/css">
 			[v-cloak] {
 				display: none;
 			}
-
+			
 			.comment_inner {
 				/*width: 200px;*/
 				word-break: break-all;
@@ -26,13 +26,13 @@
 				overflow: hidden;
 				/** 隐藏超出的内容 **/
 			}
-
+			
 			.nameTime {
 				font-size: 12px;
 				color: #999999;
 				padding-top: 15px;
 			}
-
+			
 			p {
 				text-overflow: ellipsis;
 				overflow: hidden;
@@ -42,118 +42,118 @@
 				-webkit-box-orient: vertical;
 				margin-right: 10px;
 			}
-
+			
 			.mui-content>.mui-table-view:first-child {
 				margin-top: -1px;
 			}
-
+			
 			.mui-pull-caption {
 				font-size: 14px; //字体大小
 				color: #666666;
 				font-weight: normal;
 			}
-
+			
 			.catalogs {
 				margin-top: 10px;
 			}
 			/*滑动菜单行高*/
-
+			
 			.swiper-slide {
 				height: 35px;
 			}
-
+			
 			.swiper-container {
 				margin-left: 20px !important;
 			}
-
+			
 			.fontcolor {
 				color: #00CFBD;
 			}
 		</style>
-</head>
+	</head>
 
-<body style="background: white;">
-<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;" id="tempHead">
-	<a @click="clickLeftImg" class="mui-icon mui-pull-left">
-		<img :src=headImg style="width: 26px;height: 26px;border-radius: 50%;" />
-	</a>
-	<h1 @click="clickTitle()" class="mui-title" style="color: white;">
-		<a class="mui-icon" style="font-size: 17px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
-	</h1>
-</header>
-<div class="mui-content mui-scroll-wrapper mui-fullscreen" style="background: white;" id="contentData">
-	<div class="swiper-container catalogs" id="ziyuanbao">
-		<div class="swiper-wrapper">
-			<div class="swiper-slide" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
+	<body style="background: white;">
+		<header class="mui-bar mui-bar-nav" v-cloak style="background-color:#00CFBD;" id="tempHead">
+			<a @click="clickLeftImg" v-cloak class="mui-icon mui-pull-left">
+				<img :src=headImg style="width: 26px;height: 26px;border-radius: 50%;" />
+			</a>
+			<h1 @click="clickTitle()" class="mui-title" v-cloak style="color: white;">
+				<a class="mui-icon" style="font-size: 15px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
+			</h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper mui-fullscreen" v-cloak style="background: white;" id="contentData">
+			<div class="swiper-container catalogs" id="ziyuanbao">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
+				</div>
+			</div>
+			<div class="mui-scroll">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
+						<a href="javascript:;">
+							<div v-if="resourceModel.is_pack">
+								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
+							</div>
+							<div v-else="">
+								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
+								<img v-else-if="resourceModel.file_ext == 'doc'" class="mui-media-object mui-pull-left" src="../../img/swiper/doc.png" />
+								<img v-else-if="resourceModel.file_ext == 'docx'" class="mui-media-object mui-pull-left" src="../../img/swiper/docx.png" />
+								<img v-else-if="resourceModel.file_ext == 'mp3'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp3.png">
+								<img v-else-if="resourceModel.file_ext == 'asf'" class="mui-media-object mui-pull-left" src="../../img/swiper/asf.png">
+								<img v-else-if="resourceModel.file_ext == 'avi'" class="mui-media-object mui-pull-left" src="../../img/swiper/avi.png">
+								<img v-else-if="resourceModel.file_ext == 'flv'" class="mui-media-object mui-pull-left" src="../../img/swiper/flv.png">
+								<img v-else-if="resourceModel.file_ext == 'gif'" class="mui-media-object mui-pull-left" src="../../img/swiper/gif.png">
+								<img v-else-if="resourceModel.file_ext == 'ppt'" class="mui-media-object mui-pull-left" src="../../img/swiper/ppt.png">
+								<img v-else-if="resourceModel.file_ext == 'pptx'" class="mui-media-object mui-pull-left" src="../../img/swiper/pptx.png">
+								<img v-else-if="resourceModel.file_ext == 'xls'" class="mui-media-object mui-pull-left" src="../../img/swiper/xls.png">
+								<img v-else-if="resourceModel.file_ext == 'xlsx'" class="mui-media-object mui-pull-left" src="../../img/swiper/xlsx.png">
+								<img v-else-if="resourceModel.file_ext == 'mpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/mpg.png">
+								<img v-else-if="resourceModel.file_ext == 'swf'" class="mui-media-object mui-pull-left" src="../../img/swiper/swf.png">
+								<img v-else-if="resourceModel.file_ext == 'ts'" class="mui-media-object mui-pull-left" src="../../img/swiper/ts.png">
+								<img v-else-if="resourceModel.file_ext == 'wav'" class="mui-media-object mui-pull-left" src="../../img/swiper/wav.png">
+								<img v-else-if="resourceModel.file_ext == 'wma'" class="mui-media-object mui-pull-left" src="../../img/swiper/wma.png">
+								<img v-else-if="resourceModel.file_ext == 'wmv'" class="mui-media-object mui-pull-left" src="../../img/swiper/wmv.png">
+								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
+								<img v-else-if="resourceModel.file_ext == 'exe'" class="mui-media-object mui-pull-left" src="../../img/swiper/exe.png">
+								<img v-else-if="resourceModel.file_ext == 'jpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/jpg.png">
+								<img v-else-if="resourceModel.file_ext == 'png'" class="mui-media-object mui-pull-left" src="../../img/swiper/png.png">
+								<img v-else-if="resourceModel.file_ext == 'rar'" class="mui-media-object mui-pull-left" src="../../img/swiper/rar.png">
+								<img v-else-if="resourceModel.file_ext == 'zip'" class="mui-media-object mui-pull-left" src="../../img/swiper/zip.png">
+								<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
+								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
+							</div>
+							<div class="mui-media-body" style="font-size: 16px;color: #333;">
+								{{resourceModel.name}}
+								<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</div>
-	<div class="mui-scroll">
-		<ul class="mui-table-view">
-			<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
-				<a href="javascript:;">
-					<div v-if="resourceModel.is_pack">
-						<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
-					</div>
-					<div v-else="">
-						<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
-						<img v-else-if="resourceModel.file_ext == 'doc'" class="mui-media-object mui-pull-left" src="../../img/swiper/doc.png" />
-						<img v-else-if="resourceModel.file_ext == 'docx'" class="mui-media-object mui-pull-left" src="../../img/swiper/docx.png" />
-						<img v-else-if="resourceModel.file_ext == 'mp3'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp3.png">
-						<img v-else-if="resourceModel.file_ext == 'asf'" class="mui-media-object mui-pull-left" src="../../img/swiper/asf.png">
-						<img v-else-if="resourceModel.file_ext == 'avi'" class="mui-media-object mui-pull-left" src="../../img/swiper/avi.png">
-						<img v-else-if="resourceModel.file_ext == 'flv'" class="mui-media-object mui-pull-left" src="../../img/swiper/flv.png">
-						<img v-else-if="resourceModel.file_ext == 'gif'" class="mui-media-object mui-pull-left" src="../../img/swiper/gif.png">
-						<img v-else-if="resourceModel.file_ext == 'ppt'" class="mui-media-object mui-pull-left" src="../../img/swiper/ppt.png">
-						<img v-else-if="resourceModel.file_ext == 'pptx'" class="mui-media-object mui-pull-left" src="../../img/swiper/pptx.png">
-						<img v-else-if="resourceModel.file_ext == 'xls'" class="mui-media-object mui-pull-left" src="../../img/swiper/xls.png">
-						<img v-else-if="resourceModel.file_ext == 'xlsx'" class="mui-media-object mui-pull-left" src="../../img/swiper/xlsx.png">
-						<img v-else-if="resourceModel.file_ext == 'mpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/mpg.png">
-						<img v-else-if="resourceModel.file_ext == 'swf'" class="mui-media-object mui-pull-left" src="../../img/swiper/swf.png">
-						<img v-else-if="resourceModel.file_ext == 'ts'" class="mui-media-object mui-pull-left" src="../../img/swiper/ts.png">
-						<img v-else-if="resourceModel.file_ext == 'wav'" class="mui-media-object mui-pull-left" src="../../img/swiper/wav.png">
-						<img v-else-if="resourceModel.file_ext == 'wma'" class="mui-media-object mui-pull-left" src="../../img/swiper/wma.png">
-						<img v-else-if="resourceModel.file_ext == 'wmv'" class="mui-media-object mui-pull-left" src="../../img/swiper/wmv.png">
-						<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
-						<img v-else-if="resourceModel.file_ext == 'exe'" class="mui-media-object mui-pull-left" src="../../img/swiper/exe.png">
-						<img v-else-if="resourceModel.file_ext == 'jpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/jpg.png">
-						<img v-else-if="resourceModel.file_ext == 'png'" class="mui-media-object mui-pull-left" src="../../img/swiper/png.png">
-						<img v-else-if="resourceModel.file_ext == 'rar'" class="mui-media-object mui-pull-left" src="../../img/swiper/rar.png">
-						<img v-else-if="resourceModel.file_ext == 'zip'" class="mui-media-object mui-pull-left" src="../../img/swiper/zip.png">
-						<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
-						<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
-					</div>
-					<div class="mui-media-body" style="font-size: 16px;color: #333;">
-						{{resourceModel.name}}
-						<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
-					</div>
-				</a>
-			</li>
-		</ul>
-	</div>
-</div>
 
-<script src="../../js/mui.min.js"></script>
-<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
-<script type="text/javascript" src="../../js/utils/vue.js"></script>
-<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
-<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
-<!--加密-->
-<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../js/libs/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
-<!---->
-<script src='../../js/libs/crypto-js/require.js'></script>
-<script src='../../js/utils/signHmacSHA1.js'></script>
-<script src='../../js/utils/sortSign.js'></script>
-<script src="../../js/storageKeyName.js"></script>
-<script src="../../js/utils/store.js"></script>
-<script src="../../js/publicProtocol-ziyuan.js"></script>
-<script src="../../js/utils/events.js"></script>
-<script src="../../js/libs/jquery.js"></script>
-<script src="../../js/utils/pushPermission.js"></script>
-<script type="text/javascript">
+		<script src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/vue.js"></script>
+		<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
+		<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
+		<!--加密-->
+		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script src='../../js/libs/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/publicProtocol-ziyuan.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script src="../../js/libs/jquery.js"></script>
+		<script src="../../js/utils/pushPermission.js"></script>
+		<script type="text/javascript">
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
@@ -333,15 +333,15 @@
 								//教材
 								contentData.bookModel = data.RspData.book;
 								var catalogObj = {
-									percode: data.RspData.per.selected, //学段代码
-									subcode: data.RspData.sub.selected, //科目代码
-									matercode: data.RspData.mater.selected, //教材代码
+									percode: data.RspData.per.selected, //学段代码 
+									subcode: data.RspData.sub.selected, //科目代码 
+									matercode: data.RspData.mater.selected, //教材代码 
 									fasccode: data.RspData.fasc.selected //分册代码
 								}
 								store.set(window.storageKeyName.CATALOGOBJ, catalogObj);
 							}
 						}
-						//获取资源(分页)
+						//获取资源(分页) 
 						getZiYuanList();
 					} else {
 						mui.toast(data.RspTxt);
@@ -538,20 +538,6 @@
 							console.log('000000003');
 							//							var imgUrl=model.original_file_url;
 							if(plus.os.name == 'Android') {
-// 								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
-// 									console.log("result>>>>>>" + JSON.stringify(result));
-// 									console.log("result>>>>>>" + result[0]);
-// 									console.log("result>>>>>>" + result[0].path);
-// 									var jsonObj=JSON.parse(result[0]);
-// 									console.log("result>>>>>>file://" + jsonObj.path);
-// 									plus.nativeUI.previewImage("file://"+jsonObj.path, {
-// 										current: 0,
-// 										loop: false,
-// 										indicator: 'number'
-// 									});
-// 								}, function(result) {
-// 									console.log('未知错误：' + result);
-// 								});
 								plus.nativeUI.previewImage([model.openFileUrl]);
 							} else {
 								plus.nativeUI.previewImage(model.openFileUrl, {
@@ -561,11 +547,6 @@
 								});
 							}
 						} else if(model.file_ext == 'ppt' || model.file_ext == 'pptx' || model.file_ext == 'doc' || model.file_ext == 'docx' || model.file_ext == 'pdf' || model.file_ext == 'xlsx' || model.file_ext == 'xls') { //文档
-							//							var tempUrl = model.convert_file_url;
-							//							if (model.file_ext == 'pdf') {
-							//								tempUrl = model.original_file_url;
-							//							}
-							//							console.log('000000004:'+tempUrl);
 							if(plus.os.name == 'Android') {
 								console.log('000000005');
 								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
@@ -628,7 +609,7 @@
 				interval: 5000
 			});
 
-			//获取资源(分页)
+			//获取资源(分页) 
 			var getZiYuanList = function() {
 				//资源类型
 				var tempCategoryid = '';
@@ -683,6 +664,6 @@
 				});
 			}
 		</script>
-</body>
+	</body>
 
 </html>

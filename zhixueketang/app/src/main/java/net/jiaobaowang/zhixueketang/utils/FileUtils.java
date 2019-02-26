@@ -28,6 +28,7 @@ public class FileUtils extends StandardFeature {
             this.activity = pWebview.getActivity();
             this.CallBackID = array.optString(0);
             String jsonStr =array.optString(1);
+            System.out.println(jsonStr);
             JSONObject obj=JSON.parseObject(jsonStr);
             this.URL=obj.get("openFileUrl")+"";
             this.TYPE=obj.get("file_ext")+"";
@@ -35,7 +36,9 @@ public class FileUtils extends StandardFeature {
 
             int i = URL.lastIndexOf("/");
             int z = URL.indexOf("?");
-            String NAME = URL.substring(i,z)+"."+TYPE;
+            String nameC=URL.substring(i,z);
+            String NAME = nameC.contains(".")?nameC:nameC+"."+TYPE;
+
             Intent intent =new Intent();
             intent.setClass(activity,TbsActivity.class);
             intent.putExtra("URL",URL);

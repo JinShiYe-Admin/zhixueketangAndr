@@ -11,10 +11,10 @@
 		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
 			.catalogs{
-				margin-top: 5px;
+				margin-top: 6px;
 			}
 			
-			.names{
+			.names{ 
 				padding-left: 15px;
 				width: 70px;
 				position: relative;
@@ -205,34 +205,34 @@
 	</head>
 
 	<body style="background: white;">
-		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
-			<a  class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;height: 44px;">
+			<a  class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white"></a>
 			<h1 class="mui-title" style="color: white;">切换目录</h1>
 			<!--<a @click="sure" class="mui-pull-right" style="color: white;font-size: 15px;margin-top: 10px;">确定</a>-->
 		</header>
 		<div class="mui-content" style="background: white;">
 			<div id="catalog">
 				<!--顶部滑动菜单-->
-				<div class="names">学段：</div>
-				<div class="swiper-container catalogs" id="xueduan">
+				<div class="names" v-cloak>{{xueduanStr}}</div>
+				<div class="swiper-container catalogs" v-cloak id="xueduan">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" :class="xd.ischeck==1?'fontcolor':''" v-for="(xd,index) in xueduan" @tap="catalogItemClick(xueduan,xd,'xd')">{{xd.pername}}</div>
 					</div>
 				</div>
-				<div class="names">科目：</div>
-				<div class="swiper-container" id="kemu">
+				<div class="names" v-cloak>{{kemuStr}}</div>
+				<div class="swiper-container" style="margin-top: 1px;" v-cloak id="kemu">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km,'km')">{{km.subname}}</div>
 					</div>
 				</div>
-				<div class="names">教版：</div>
-				<div class="swiper-container" id="jiaoban">
+				<div class="names" v-cloak>{{jiaobanStr}}</div>
+				<div class="swiper-container" style="margin-top: 1px;" v-cloak id="jiaoban">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" :class="jb.ischeck==1?'fontcolor':''" v-for="(jb,index) in jiaoban"  @tap="catalogItemClick(jiaoban,jb,'jb')">{{jb.matername}}</div>
 					</div>
 				</div> 
-				<div class="names">分册：</div>
-				<div class="swiper-container" id="fence">
+				<div class="names" v-cloak>{{fenceStr}}</div>
+				<div class="swiper-container" style="margin-top: 1px;" v-cloak id="fence">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" :class="fc.ischeck==1?'fontcolor':''" v-for="(fc,index) in fence"  @tap="catalogItemClick(fence,fc,'fc')">{{fc.fascname}}</div>
 					</div>
@@ -303,6 +303,10 @@
 			var catalog=new Vue({
 				el:'#catalog',
 				data:{
+					xueduanStr:'',
+					kemuStr:'',
+					jiaobanStr:'',
+					fenceStr:'',
 					xueduan:[],//学段
 					kemu:[],//科目
 					jiaoban:[],//教版
@@ -464,9 +468,14 @@
 							catalog.category=newCategory;
 							//教材
 							catalog.book=data.RspData.book;
+							//滑动菜单名称赋值,加这一段是为了让名称在一进页面vue还没渲染完成时隐藏掉,不加的话,v-clock不起作用
+							catalog.xueduanStr='学段：';
+							catalog.kemuStr='科目：';
+							catalog.jiaobanStr='教版：';
+							catalog.fenceStr='分册：';
 						}
 					} else {
-						mui.toast(data.msg);
+						mui.toast(data.RspTxt);
 					}
 				});
 			}
