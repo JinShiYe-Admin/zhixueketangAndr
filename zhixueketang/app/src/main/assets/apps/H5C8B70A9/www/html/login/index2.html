@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>校讯通2</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../fonts/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="../../fonts/iconfont2.css" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-bar-tab .mui-tab-item.mui-active {
+				color: #00CFBD;
+			}
+		</style>
+	</head>
+
+	<body>
+		<nav class="mui-bar mui-bar-tab" id="navIndex">
+			<a id="defaultTab" class="mui-tab-item mui-active" href="../../html/login/loginFnoPermissions.html">
+				<span class="mui-icon iconfont icon-jiaxiaohudong"></span>
+				<span class="mui-tab-label">家校互动</span>
+			</a>
+
+			<a id="kecheng" class="mui-tab-item" href="../../html/login/loginFnoPermissions.html">
+				<span class="mui-icon iconfont icon-kouyu"></span>
+				<span class="mui-tab-label">英语听测</span>
+			</a>
+			<a id="zhuxue" class="mui-tab-item" href="../../html/login/loginFnoPermissions.html">
+				<span class="mui-icon iconfont icon-timu"></span>
+				<span class="mui-tab-label">同步题库</span>
+			</a>
+			<a id="kejiao" class="mui-tab-item " href="../../html/sciedu/sciedu_home.html">
+				<span class="mui-icon iconfont icon-kejiaowenhua"></span>
+				<span class="mui-tab-label">科教活动</span>
+			</a>
+		</nav>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/libs/jquery.js"></script>
+		<!--<script src="js/utils/app-update.js"></script>-->
+		<script type="text/javascript" charset="utf-8">
+			//mui初始化
+			mui.init();
+			var subpage_style = {
+				top: '0px',
+				bottom: '51px'
+			};
+
+			var aniShow = {};
+			var oHeight = $(document).height(); //屏幕当前的高度
+			$(window).resize(function() {
+				var wvs = plus.webview.getDisplayWebview();
+				if($(document).height() < oHeight) {
+					document.getElementById('navIndex').style.display = 'none'
+					for(var i = 0; i < wvs.length; i++) {
+						wvs[i].setStyle({
+							top: '0px',
+							bottom: '0px'
+						})
+					}
+
+				} else {
+					document.getElementById('navIndex').style.display = 'inherit'
+					for(var i = 0; i < wvs.length; i++) {
+						wvs[i].setStyle({
+							top: '0px',
+							bottom: '51px'
+						})
+					}
+				}
+
+			});
+
+			//创建子页面，首个选项卡页面显示，其它均隐藏；
+			mui.plusReady(function() {
+				console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooo');
+				//安卓的连续点击两次退出程序
+				var backButtonPress = 0;
+				//重写返回键
+				mui.back = function(event) {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+				var defaultUrl='../../html/login/loginFnoPermissions.html';
+				var self = plus.webview.currentWebview();
+
+				//当前激活选项
+				activeTab = defaultUrl;
+				var title = document.getElementById("title");
+
+				//选项卡点击事件
+				mui('.mui-bar-tab').on('tap', 'a', function(e) {
+						var targetTab = this.getAttribute('href');
+						if(targetTab == activeTab) {
+							return;
+						}else{
+							var viewIsExists=plus.webview.getWebviewById(targetTab);
+							if(viewIsExists==null||viewIsExists==''||viewIsExists==undefined){
+								var newSub = plus.webview.create(targetTab, targetTab, subpage_style);
+								newSub.hide();
+								self.append(newSub);
+							} 
+						}
+						//更换标题
+						//title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+						plus.webview.show(targetTab, "fade-in", 00);
+						//隐藏当前;
+						plus.webview.hide(activeTab);
+						//更改当前活跃的选项卡 
+						activeTab = targetTab;
+				});
+
+			
+				var defaultTab = document.getElementById("kejiao");
+				//模拟首页点击
+				mui.trigger(defaultTab, 'tap');
+				
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if(defaultTab !== current) {
+					current.classList.remove('mui-active');
+					defaultTab.classList.add('mui-active');
+				}
+				//判断是否需要更新
+				//				var personal = store.get(window.storageKeyName.PERSONALINFO);
+				//				if(personal==''||personal==null||personal==undefined){
+				//					console.log("无法获得用户学校ID，无法检测更新")
+				//				}else{
+				//					appUpdate.updateApp(personal.schid);
+				//				}
+			});
+		</script>
+	</body>
+
+</html>
