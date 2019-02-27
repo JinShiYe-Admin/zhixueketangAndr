@@ -27,6 +27,20 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_below="@+id/titleBarD"
+        android:id="@+id/loading_office"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:height="50dp"
+            android:text="正在加载"
+            android:gravity="center"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/titleBarD"
         android:id="@+id/tbsView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

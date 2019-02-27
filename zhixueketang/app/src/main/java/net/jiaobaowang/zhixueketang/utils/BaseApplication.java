@@ -28,7 +28,7 @@ public class BaseApplication extends DCloudApplication {
         try {
             //以下都不是必须的，根据需要自行选择,一般来说只需要 debug,缓存相关,cookie相关的 就可以了
             OkGo.getInstance()
-                    .debug("OkGo")
+//                    .debug("OkGo")
                     //如果使用默认的 60秒,以下三行也不需要传
                     .setConnectTimeout(OkGo.DEFAULT_MILLISECONDS*10)  //全局的连接超时时间
                     .setReadTimeOut(OkGo.DEFAULT_MILLISECONDS*10)     //全局的读取超时时间

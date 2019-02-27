@@ -15,16 +15,24 @@ import io.dcloud.common.DHInterface.IWebview;
 import io.dcloud.common.DHInterface.StandardFeature;
 import io.dcloud.common.util.JSUtil;
 
-public class FileUtils extends StandardFeature {
+public class FileUtils extends StandardFeature{
 
     private String CallBackID;
     private Activity activity;
-    private String  URL,TYPE,NAME;
+    private String  URL,TYPE;
+    private String json;
+    private IWebview pWebview;
+    public static FileUtils fileUtils;
+
+    public FileUtils(){
+        super();
+        fileUtils=this;
+    }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void openFileFromURL(IWebview pWebview, JSONArray array ) {
-        String json="";
         try {
+            this.pWebview=pWebview;
             this.activity = pWebview.getActivity();
             this.CallBackID = array.optString(0);
             String jsonStr =array.optString(1);
@@ -44,7 +52,7 @@ public class FileUtils extends StandardFeature {
             intent.putExtra("URL",URL);
             intent.putExtra("NAME",NAME);
             activity.startActivity(intent);
-            json="{\"code\":0,\"msg\":\"接收文件路径成功\"}";
+            json="{\"code\":0,\"msg\":\"文件下载成功，正在打开...\"}";
             JSUtil.execCallback(pWebview, CallBackID,new JSONArray().put(json), JSUtil.OK, false);
         }catch (Exception e){
             json="{\"code\":-1,\"msg\":\"文件格式不正确，无法打开，e:\""+e.getMessage()+"}";
