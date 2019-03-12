@@ -45,6 +45,7 @@
 		<script src="../../js/libs/jquery.js"></script>
 		<script src="../../js/utils/app-update.js"></script>
 		<!--<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>-->
+		<script src="../../js/utils/app-update.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			mui.init();
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -63,7 +64,7 @@
 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
-
+				appUpdate.updateApp(personal.schid);
 				//安卓的连续点击两次退出程序
 				var backButtonPress = 0;
 				//重写返回键
@@ -102,6 +103,21 @@
 							self.append(newSub);
 						}
 					}
+					
+					//父——>子页传值
+					if(targetTab=='../../html/ziyuan/ziyuanIndex.html'){
+						var homeSchoolIndex=plus.webview.getWebviewById(targetTab);
+						homeSchoolIndex.evalJS('toChildPage("智学资源")')
+					}
+					if(targetTab=='../../html/btlearn/testIndex.html'){
+						var oralsIndex=plus.webview.getWebviewById(targetTab);
+						oralsIndex.evalJS('toChildPage("组卷测试")')
+					}
+					if(targetTab=='../../html/btlearn/analysisIndex.html'){
+						var zxktIndex=plus.webview.getWebviewById(targetTab);
+						zxktIndex.evalJS('toChildPage("学情分析")')
+					}
+					
 					//更换标题
 					//title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 					plus.webview.show(targetTab, "fade-in", 00);

@@ -78,13 +78,13 @@
 				<img :src=headImg style="width: 26px;height: 26px;border-radius: 50%;" />
 			</a>
 			<h1 @click="clickTitle()" class="mui-title" v-cloak style="color: white;">
-				<a class="mui-icon" style="font-size: 15px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
+				<a class="mui-icon" style="font-size: 16px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
 			</h1>
 		</header>
 		<div class="mui-content mui-scroll-wrapper mui-fullscreen" v-cloak style="background: white;" id="contentData">
 			<div class="swiper-container catalogs" id="ziyuanbao">
 				<div class="swiper-wrapper">
-					<div class="swiper-slide" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
+					<div class="swiper-slide" style="font-size: 14px;" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
 				</div>
 			</div>
 			<div class="mui-scroll">
@@ -122,7 +122,7 @@
 								<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
 								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
 							</div>
-							<div class="mui-media-body" style="font-size: 16px;color: #333;">
+							<div class="mui-media-body" style="font-size: 14px;color: #333;">
 								{{resourceModel.name}}
 								<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
 							</div>
@@ -224,7 +224,9 @@
 				}
 			}
 
-			var main, menu, mask = mui.createMask(_closeMenu);
+			var main;
+			var menu;
+			var mask = mui.createMask(_closeMenu);
 			var showMenu = false,
 				mode = 'all-move';
 			//首先改变移动标志
@@ -234,6 +236,7 @@
 			//							left: '-70%'
 			//						});
 			mui.plusReady(function() {
+				toChildPage("子页智学资源");
 				var backButtonPress = 0;
 				//重写返回键
 				mui.back = function(event) {
@@ -262,7 +265,7 @@
 							zindex: 9997
 						}
 					});
-				}, 1);
+				}, 1000);
 
 				window.addEventListener('home_setHeadImg', function(data) {
 					tempHead.headImg = data.detail.imgurl;
@@ -351,19 +354,21 @@
 
 			//关闭侧滑
 			window.addEventListener('closeMinePage', function(data) {
+				console.log('closeMinePage,菜单已关闭')
 				closeMenu();
 			});
 
 			window.addEventListener('hideMenu', function(data) {
-				console.log('侧滑执行方法')
-				closeMenu();
+				console.log('hideMenu,菜单已关闭')
+				mask.close();
+				menu.hide();
+				showMenu = false;
 			});
-
 			/**
 			 * 显示菜单菜单
 			 */
 			function openMenu() {
-				if(!showMenu) {
+//				if(!showMenu) {
 					var wvs = plus.webview.getDisplayWebview();
 					for(var i = 0; i < wvs.length; i++) {
 						var url = wvs[i].getURL();
@@ -405,12 +410,12 @@
 								});
 								break;
 							case 'all-move':
-								main.setStyle({
-									left: '70%',
-									transition: {
-										duration: 150
-									}
-								});
+//								main.setStyle({
+//									left: '70%',
+//									transition: {
+//										duration: 150
+//									}
+//								});
 								menu.setStyle({
 									left: '0%',
 									transition: {
@@ -424,7 +429,7 @@
 					mask.show();
 					showMenu = true;
 					//通知index页隐藏tab栏
-				}
+//				}
 			}
 			/**
 			 * 关闭侧滑菜单
@@ -439,7 +444,7 @@
 			 * 关闭侧滑菜单（业务部分）
 			 */
 			function _closeMenu() {
-				if(showMenu) {
+//				if(showMenu) {
 					//						mui.fire(plus.webview.currentWebview().opener(), 'openClick', {});
 					var wvs = plus.webview.getDisplayWebview();
 					for(var i = 0; i < wvs.length; i++) {
@@ -469,12 +474,12 @@
 							break;
 						case 'all-move':
 							//主窗体开始侧滑；
-							main.setStyle({
-								left: '0',
-								transition: {
-									duration: 150
-								}
-							});
+//							main.setStyle({
+//								left: '0',
+//								transition: {
+//									duration: 150
+//								}
+//							});
 							//menu页面同时移动
 							menu.setStyle({
 								left: '-70%',
@@ -493,7 +498,7 @@
 					//改变标志位
 					showMenu = false;
 					//通知index页显示tab栏
-				}
+//				}
 			}
 			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
 			mui.menu = function() {
@@ -532,7 +537,15 @@
 							if(model.file_ext == 'mp4' || model.file_ext == 'mp3') {
 								utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
 							} else {
-								plus.runtime.openWeb(model.openFileUrl);
+								if(plus.os.name == 'Android') {
+									plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
+										console.log("result>>>>>>" + result[0]);
+									}, function(result) {
+										console.log('未知错误：' + result);
+									});
+								} else {
+									plus.runtime.openWeb(model.openFileUrl);
+								}
 							}
 						} else if(model.file_ext == 'jpg' || model.file_ext == 'png' || model.file_ext == 'gif') { //照片
 							console.log('000000003');
@@ -662,6 +675,11 @@
 						mui.toast(data.RspTxt);
 					}
 				});
+			}
+			
+			//父——>子页传值方法
+			function toChildPage(text){
+				console.log(text)
 			}
 		</script>
 	</body>

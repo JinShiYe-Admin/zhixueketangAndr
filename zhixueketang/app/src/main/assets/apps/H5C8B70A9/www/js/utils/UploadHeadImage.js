@@ -20,6 +20,7 @@ var UploadHeadImage = (function($, mod) {
 	var successCallBack;
 	//失败的回调
 	var errorCallBack;
+	var isListener=false;//是否已设置监听
 	/**
 	 * 设置监听
 	 * @param {Object} element 点击弹出上传选项的元素
@@ -50,31 +51,34 @@ var UploadHeadImage = (function($, mod) {
 		}
 		successCallBack = successCB;
 		errorCallBack = errorCB;
-		//设置监听
-		element.addEventListener('tap', function() {
-			var btnArray = [{
-				title: "拍照"
-			}, {
-				title: "相册"
-			}];
-			plus.nativeUI.actionSheet({
-				title: titleStr,
-				cancel: "取消",
-				buttons: btnArray
-			}, function(e) {
-				var index = e.index;
-				switch(index) {
-					case 0: //取消
-						break;
-					case 1: //拍照
-						camera();
-						break;
-					case 2: //相册
-						pick();
-						break;
-				}
+		if(!isListener){//是否已设置监听，如果为fasle，为没设置监听，之所以加这个参数，是因为安卓多次设置监听，会导致重复弹出选择框
+			isListener=true;
+			//设置监听
+			element.addEventListener('tap', function() {
+				var btnArray = [{
+					title: "拍照"
+				}, {
+					title: "相册"
+				}];
+				plus.nativeUI.actionSheet({
+					title: titleStr,
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch(index) {
+						case 0: //取消
+							break;
+						case 1: //拍照
+							camera();
+							break;
+						case 2: //相册
+							pick();
+							break;
+					}
+				});
 			});
-		});
+		}
 	}
 
 	//拍照

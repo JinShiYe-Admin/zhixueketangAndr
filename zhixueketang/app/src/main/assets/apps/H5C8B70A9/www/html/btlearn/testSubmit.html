@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
@@ -87,11 +87,7 @@
 						mui.back();
 					},
 					//提交
-					submit: function() {
-//						var personal = store.get(window.storageKeyName.PERSONALINFO);
-//						personal.utoken = "jjsdkfk";
-//						store.set(window.storageKeyName.PERSONALINFO, personal);
-						
+					submit: function() {						
 						plus.nativeUI.showWaiting();
 						var sbData = self.submitData;
 						var answerJson = {};
@@ -107,38 +103,54 @@
 								answerJson: JSON.stringify(answerJson)
 							},
 							success: function(res) {
+								plus.nativeUI.closeWaiting();
 								var res_data = JSON.parse(res.data);
+								console.log("测试结果："+res.data)
+								
+								var allWv = plus.webview.all();
+								for(var i=0;i<allWv.length;i++) {
+									//刷新学情分析页面数据
+									if(allWv[i].getURL().indexOf("analysisIndex.html")!=-1){
+										mui.fire(allWv[i], "refresh");
+									}
+									// 刷新测试首页
+									if(allWv[i].getURL().indexOf("testIndex.html")!=-1){
+										mui.fire(allWv[i], "checkFinish", {catalogId: sbData.catalogId});
+									}
+								}
+								//关闭开始页
+								var test_start = plus.webview.getWebviewById('bl-test-start');
+								test_start && test_start.close("none");
+								//关闭测试页 
+								var bl_testing = plus.webview.getWebviewById('bl-testing');
+								bl_testing && bl_testing.close('none');
+								//echarts 重新绘图
+								var als_detail = plus.webview.getWebviewById('bl-analysis-detail');
+								als_detail && mui.fire(als_detail, "rePain");
+								
 								//结果页
 								var bl_result = plus.webview.getWebviewById('bl-test-result');
+								var result_data = {
+									report: res_data.report,
+									detailInfo: res_data.detailInfo,
+									levels: res_data.levels,
+									nodeTitle: sbData.title
+								};
 								if(bl_result){
-									mui.fire(bl_result, "resubmit", {
-										report: res_data.report,
-										detailInfo: res_data.detailInfo,
-										nodeTitle: sbData.title
+									mui.fire(bl_result, "resubmit", result_data);
+									bl_result.show("slide-in-right",250,function(){
+										//关闭提交页
+										var bl_submit = plus.webview.getWebviewById('bl-test-submit');
+										bl_submit && bl_submit.close('none');
 									});
-									bl_result.show();
 								}else{
 									mui.openWindow({
 										url: "testResult.html",
 										id: "bl-test-result",
-										extras: {
-											report: res_data.report,
-											detailInfo: res_data.detailInfo,
-											nodeTitle: sbData.title
-										}
+										extras: result_data
 									});
 								}
-//								var test_result = plus.webview.create("testResult.html", "bl-test-result", {}, {
-//										report: res_data.report,
-//										detailInfo: res_data.detailInfo,
-//										nodeTitle: sbData.title
-//								});
-//								test_result.show("slide-in-right", 200, function(){
-//									plus.nativeUI.closeWaiting();
-//								});
-								plus.nativeUI.closeWaiting();
-								//刷新其他页面数据
-								mui.fire(plus.webview.getWebviewById('bl-index'), "refresh");
+								
 							},
 							fail: function(res) {
 								console.log(res);

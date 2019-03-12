@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
@@ -90,7 +90,7 @@
 
 	<body>
 		<div id="testing" v-cloak :class="{tested: isTested}">
-			<header class="mui-bar mui-bar-nav">
+			<header class="mui-bar mui-bar-nav theme">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 				<span class="mui-icon mui-pull-right time" v-if="isTested">用时：{{time}}</span>
 				<span class="mui-icon mui-pull-right time" v-else>{{timeStr}}</span>
@@ -106,8 +106,8 @@
 				<div class="question-box" v-if="questions[index]">
 					<div class="question">{{ (index+1)+".(单选题) " }}<span v-html="questions[index].content"></span></div>
 					<div class="option-box">
-						<div class="option-item" v-for="(item, k) in transOption" :key="k">
-							<span class="option-label" v-if="!isTested" :class="{selected: questions[index].stu_answer==k}" @tap="selectOption(k)">{{k}}</span>
+						<div class="option-item" v-for="(item, k) in transOption" :key="k" @tap="selectOption(k)">
+							<span class="option-label" v-if="!isTested" :class="{selected: questions[index].stu_answer==k}">{{k}}</span>
 							<span class="option-label" v-else :class="answerJudge(k)">{{k}}</span>
 							<span v-html="item"></span>
 						</div>
@@ -187,6 +187,10 @@
 					});
 				}
 				
+				// 关闭侧滑返回功能
+// 				self.setStyle({
+// 					'popGesture': 'none'
+// 				});
 				
 				// 获取题目
 				testing.isTested = self.isTested;
@@ -197,16 +201,35 @@
 					testing.paperName = self.paperName;
 					testing.questions = self.detailInfo;
 					testing.time = self.used_time;
+					testing.index = self.index||0;
 				}else{ 
 					//新测试
-//					if(self.opener().id=="bl-test-start") {
-//						self.opener().hide();
-//					}
 					testing.paperName = self.data.paperName;
 					testing.questions = self.data.questions;
 					testing.diskey = self.data.diskey;
 					//计时
 					testing.timer();
+					// 题目异常
+					console.log("试题："+JSON.stringify(testing.questions))
+					var isWrongOpt=false;
+					for(var i=0;i<testing.questions.length;i++) {
+						var ques = testing.questions[i];
+						try{
+							var ques_ops = JSON.parse(ques.option);
+							ques_ops.forEach(function(v){
+								if(!/^[A-Z]/.test(v)){
+									isWrongOpt = true;
+								}
+							});
+						}catch(e){
+							isWrongOpt = true;
+						}
+						if(isWrongOpt) break;
+					}
+					if(isWrongOpt){
+						self.close();
+						plus.nativeUI.toast("题目异常，请重新做题或换个知识点");
+					}
 				}
 				
 			});
@@ -333,17 +356,6 @@
 									}
 								}
 							});
-//							var test_submit = plus.webview.create("testSubmit.html", "bl-test-submit", {}, {
-//								submitData: {
-//										title: _this.headerTitle,
-//										diskey: _this.diskey,
-//										catalogId: self.catalogId,
-//										name: _this.paperName,
-//										usedTime: _this.timeStr,
-//										answerArray: ans
-//									}
-//							});
-//							test_submit.show("slide-in-right");
 						}else if(des<0){
 							return false;
 						}else{
@@ -397,7 +409,7 @@
 					}
 				}
 			});
-			
+			// beforeLeaveDialog();
 			//离开前对话框
 			function beforeLeaveDialog(yesCallback){
 				layer.closeAll();
@@ -410,7 +422,7 @@
 				  area: "6rem",
 				  btn: ["确认", "取消"],
 				  btnAlign: 'c',
-				  shadeClose: true,
+				  shadeClose: false,
 				  isOutAnim: false,
 				  content: $('#beforeLeaveDialog'),
 				  yes: function(index, layero){

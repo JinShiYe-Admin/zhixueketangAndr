@@ -160,6 +160,16 @@ function filterArray(arr, key, val) {
 	return r;
 }
 
+// 遍历树形菜单，并回调
+function readTree(tree, callback) {
+    for (var i = 0; i < tree.length; i++) {
+        callback(tree[i]);
+        if(tree[i].children) {
+            readTree(tree[i].children, callback);
+        }
+    }
+}
+
 //树形菜单
 (function(obj){
 	if(!obj) return;
@@ -167,10 +177,10 @@ function filterArray(arr, key, val) {
 		template: '<div class="tree-item">'+
 					'<div v-if="model.children&&model.children.length" class="label-wrapper mui-ellipsis" @tap="toggleChildren" :style="indent">'+
 						'<i class="label-icon" :class="iconClasses"></i>'+
-						'<span class="label-name">{{model.name}}</span>'+
+						'<span class="label-name" v-html="model.name"></span>'+
 					'</div>'+
 					'<div v-else class="label-wrapper mui-ellipsis" @tap="nodeClick(model)" :style="indent">'+
-						'<span class="label-name">{{model.name}}</span>'+
+						'<span class="label-name" v-html="model.name"></span>'+
 						'<span v-if="model.is_finish" class="done-box icon-true"></span>'+
 					'</div>'+
 					'<tree-menu v-show="showChildren" v-for="(node, k) in model.children" :model="node" :depth="depth + 1" :key="k" @node-click="outClick"></tree-menu>'+
@@ -179,6 +189,11 @@ function filterArray(arr, key, val) {
 		data: function() {
 			return {
 				showChildren: false
+			}
+		},
+		watch: {
+			'model': function() {
+				this.showChildren = false;
 			}
 		},
 		computed: {
@@ -190,6 +205,11 @@ function filterArray(arr, key, val) {
 			},
 			indent: function() {
 			      return this.depth>0 ? { 'padding-left': this.depth*0.55+"rem" } : null;
+			}
+		},
+		mounted: function(){
+			if(this.model.isKnowledge){
+				this.$parent.showChildren = true;
 			}
 		},
 		methods: {

@@ -4,6 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import com.lzy.okgo.OkGo;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.tencent.smtt.sdk.QbSdk;
 
 import io.dcloud.application.DCloudApplication;
@@ -37,6 +43,28 @@ public class BaseApplication extends DCloudApplication {
             e.printStackTrace();
         }
 
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                this)
+                .memoryCacheExtraOptions(480, 800)
+                // 缓存在内存的图片的宽和高度
+                // default = device screen dimensions
+                .diskCacheExtraOptions(480, 800, null)
+                .threadPoolSize(3)
+                // 线程池内加载的数量
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .tasksProcessingOrder(QueueProcessingType.FIFO)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))//你可以通过自己的内存缓存实现
+                .memoryCacheSize(3 * 1024 * 1024)// 缓存到内存的最大数据
+                .memoryCacheSizePercentage(13)
+                .diskCacheSize(50 * 1024 * 1024)// //缓存到文件的最大数据
+                .diskCacheFileCount(100)// 文件数量
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())//将保存的时候的URI名称用MD5 加密
+                .imageDownloader(new BaseImageDownloader(this)) // default
+                .writeDebugLogs()// Remove for release app
+                .build();
+        // Initialize ImageLoader with configuration.
+        ImageLoader.getInstance().init(config);// 初始化
     }
 
     /**

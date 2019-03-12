@@ -4,7 +4,7 @@
 var appUpdate = (function(mod) {
 	
 	mod.androidUpdateUrl=window.storageKeyName.ANDROIDUPDATEURL;
-	mod.iosUpdateUrl='http://itunes.apple.com/lookup?id=1281905607';
+	mod.iosUpdateUrl='http://itunes.apple.com/lookup?id=1454589995';
 	
 	mod.fileSize;
 	mod.updateFlag = 0; //1确认升级2取消升级
@@ -143,7 +143,7 @@ var appUpdate = (function(mod) {
 			if(appVersionMinMax.max < newestVersionMinMax.max) { //整包更新
 				if(mod.updateFlag == 0) {
 					//询问是否更新
-					    setDialog('校讯通有新版本，是否下载？', "您已取消下载", function() {
+					    setDialog('智有新版本，是否下载？', "您已取消下载", function() {
 						mod.updateFlag = 1;
 						console.log("下载APK路径：" + versionInfo.download_url)
 						resolveFile(versionInfo.download_url, 1);
@@ -166,7 +166,7 @@ var appUpdate = (function(mod) {
 					return parseInt(verNo) > parseInt(appVersions[index]);
 				})
 				if(hasNewerVersion && mod.updateFlag == 0) { //如果有新版本
-					setDialog('校讯通有新版本，是否下载？', "您已取消下载", function() {
+					setDialog('智学课堂有新版本，是否下载？', "您已取消下载", function() {
 						mod.updateFlag = 1;
 						console.log("下载APK路径：")
 						plus.runtime.openURL('https://itunes.apple.com/us/app/%E6%95%99%E5%AE%9D%E4%BA%91/id1281905607?l=zh&ls=1&mt=8');
@@ -184,7 +184,7 @@ var appUpdate = (function(mod) {
 	 */
 	var setDialog = function(hint, cancelToast, callback, cancelCallback) {
 		var btnArray = ['是', '否'];
-		mui.confirm(hint, '校讯通', btnArray, function(e) {
+		mui.confirm(hint, '智学课堂', btnArray, function(e) {
 			//console.log("当前点击的东东：" + JSON.stringify(e));
 			if(e.index == 0) {
 				callback();

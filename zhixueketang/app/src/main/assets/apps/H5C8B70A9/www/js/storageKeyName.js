@@ -1,4 +1,4 @@
-﻿﻿//此js用于保存本地存储时，用到的key值
+//此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
 
@@ -49,7 +49,7 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/';//顾工接口
 //			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolCommunicationService/';//孔工接口
 //			mod.TEACHERIMG = 'https://zhxy.jiaobaowang.net:8515/schadminwebadmin/upuserimg.ashx?userid='; //老师上传头像
-//			mod.ANDROIDUPDATEURL='http://zhxy.jiaobaowang.net:8015/appupdate/xxt/versionCode.xml';//安卓升级地址
+			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';//安卓升级地址
 //			mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/AppServer.aspx';//微信支付地址
 //			mod.ALIPAYSERVER='http://192.168.1.121:8081/app/versionCode.xml';//支付宝支付地址
 //			if(mod.pay==0) {//单商家
@@ -69,7 +69,9 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
-			mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
+			// mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
+			// mod.YCYXHOST = "http://192.168.0.125:8080/yiceyixue";
+			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
 			//资源
 			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
 			break;

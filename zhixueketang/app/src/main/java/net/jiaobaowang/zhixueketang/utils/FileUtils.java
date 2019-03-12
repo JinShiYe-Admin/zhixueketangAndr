@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import org.json.JSONArray;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import io.dcloud.common.DHInterface.IWebview;
 import io.dcloud.common.DHInterface.StandardFeature;
 import io.dcloud.common.util.JSUtil;
@@ -46,13 +47,23 @@ public class FileUtils extends StandardFeature{
             int z = URL.indexOf("?");
             String nameC=URL.substring(i,z);
             String NAME = nameC.contains(".")?nameC:nameC+"."+TYPE;
-
-            Intent intent =new Intent();
-            intent.setClass(activity,TbsActivity.class);
-            intent.putExtra("URL",URL);
-            intent.putExtra("NAME",NAME);
-            activity.startActivity(intent);
-            json="{\"code\":0,\"msg\":\"文件下载成功，正在打开...\"}";
+            if(TYPE.toLowerCase().equals("wmv")||
+                    TYPE.toLowerCase().equals("wma")||
+                    TYPE.toLowerCase().equals("mpg")||
+                    TYPE.toLowerCase().equals("avi")||
+                    TYPE.toLowerCase().equals("flv")||
+                    TYPE.toLowerCase().equals("mkv")||
+                    TYPE.toLowerCase().equals("asf")){//视频格式
+                JCVideoPlayer.toFullscreenActivity(activity,URL, null, NAME);
+                json="{\"code\":0,\"msg\":\"文件正在打开...\"}";
+            }else{//文件格式
+                Intent intent =new Intent();
+                intent.setClass(activity,TbsActivity.class);
+                intent.putExtra("URL",URL);
+                intent.putExtra("NAME",NAME);
+                activity.startActivity(intent);
+                json="{\"code\":0,\"msg\":\"文件下载成功，正在打开...\"}";
+            }
             JSUtil.execCallback(pWebview, CallBackID,new JSONArray().put(json), JSUtil.OK, false);
         }catch (Exception e){
             json="{\"code\":-1,\"msg\":\"文件格式不正确，无法打开，e:\""+e.getMessage()+"}";

@@ -14,13 +14,13 @@
 			.mui-ellipsis {
 				margin-top: 10px;
 				color: black;
-				font-size: 16px;
+				font-size: 14px;
 			}
 			
 			.headName {
 				margin-top: 5px;
 				color: black;
-				font-size: 16px;
+				font-size: 14px;
 			}
 		</style>
 	</head>
@@ -33,7 +33,7 @@
 		<div class="mui-content mui-fullscreen" id="peopleInfo">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell mui-media" @click="modifyImg()">
-					<a href="javascript:;">
+					<a href="javascript:;"  id="imgLi">
 						<img class="mui-media-object mui-pull-right" id="img" :src=peopleHeadImg style="border-radius:50%;width:35px;height: 35px;">
 						<p class="mui-ellipsis">头像</p>
 					</a>
@@ -83,7 +83,6 @@
 				peopleInfo.peopleHeadImg = setImg(personal.imgurl);
 				peopleInfo.peopleName = personal.utname;
 				peopleInfo.peoplePhone = '暂无手机号';
-
 			});
 
 			var peopleInfo = new Vue({
@@ -154,8 +153,11 @@
 										break;
 								}
 							});
-						} else {
-							var img = document.getElementById("img");
+						}  
+					}
+				}
+			});
+							var img = document.getElementById("imgLi");
 							UploadHeadImage.addListener(img, 0, {
 								id: personal.utid, //utid
 								//name: data.studentName //资料名称
@@ -179,12 +181,6 @@
 								//console.log('上传并修改个人头像，失败的回调' + JSON.stringify(errorCB));
 								mui.toast(errorCB.RspTxt);
 							});
-						}
-
-					}
-				}
-			});
-
 			//上传附件
 			function uploadFile(path, index) {
 				if(chenkNetwork()) {

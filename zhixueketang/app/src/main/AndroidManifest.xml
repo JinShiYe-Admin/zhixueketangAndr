@@ -87,7 +87,6 @@
             android:process=":pushservice"
             android:taskAffinity="com.igexin.sdk.PushActivityTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="com.igexin.sdk.GActivity"
             android:excludeFromRecents="true"
@@ -111,13 +110,13 @@
             android:name="io.dcloud.feature.apsGt.GTNormalPushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice"></service>
+            android:process=":pushservice" />
 
         <activity
             android:name=".utils.TbsActivity"
             android:theme="@style/ThemeNoTitleBar" />
-
-        <activity android:name=".utils.ImageActivity"
+        <activity
+            android:name=".utils.ImageActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 

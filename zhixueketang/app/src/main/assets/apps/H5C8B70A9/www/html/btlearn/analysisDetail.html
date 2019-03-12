@@ -58,7 +58,7 @@
 				display: none;
 			}
 			.detail-list .mui-ellipsis-2 {
-				line-height: 1.2;
+				/* line-height: 1.2; */
 			}
 			.detail-list .title {
 				text-align: center;
@@ -75,6 +75,10 @@
 			}
 			#analysisDetail {
 				height: 100%;
+			}
+			.mui-android .mui-table-view-cell:after, .mui-android .same-line-list:after {
+				transform: none;
+				bottom: 1px;
 			}
 		</style>
 	</head>
@@ -254,13 +258,13 @@
 				});
 			}
 			
-//			analysisDetail.subname = "语文";
-//			analysisDetail.subScores = [10,20,20,20,0,10,0,40,10,40,40];
-//			analysisDetail.avgScore = 19;
-//			analysisDetail.failCatalogInfo = [{"name":"多音字","book_catalog_id":4468,"avg_score":16.666666666666668},{"name":"易误读常见字","book_catalog_id":4469,"avg_score":10.0},{"name":"注音","book_catalog_id":4470,"avg_score":26.0}];
-//			setTimeout(function(){
-//				getLine();
-//			}, 200);
+// 			analysisDetail.subname = "语文";
+// 			analysisDetail.subScores = [10,20,20,20,0,10,0,40,10,40,40];
+// 			analysisDetail.avgScore = 19;
+// 			analysisDetail.failCatalogInfo = [{"name":"多音字","book_catalog_id":4468,"avg_score":16.666666666666668},{"name":"易误读常见字","book_catalog_id":4469,"avg_score":10.0},{"name":"注音","book_catalog_id":4470,"avg_score":26.0}];
+// 			setTimeout(function(){
+// 				getLine();
+// 			}, 200);
 			
 		</script>
 	</body>
