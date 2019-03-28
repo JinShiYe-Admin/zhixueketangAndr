@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<!--  套餐详情：立即订购   -->
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style type="text/css">
+			[v-cloak] {
+				visibility: hidden;
+			}
+			
+			.head-portrait {
+				width: 100px;
+				height: 100px;
+				border-radius: 50%;
+				margin-bottom: 10px;
+				padding: 3px;
+				border: 1px #ECECEC solid;
+			}
+			
+			.title-info {
+				padding: 30px 0 5px 0;
+				text-align: center;
+				background: #fff;
+			}
+			
+			.title-footer {
+				background: #fff;
+				margin: -40px 10px 0 10px;
+			}
+			
+			.user-title {
+				font-size: 18px;
+				color: #333333;
+				font-weight: bold;
+			}
+			
+			.user-title-body {
+				text-align: left;
+				margin: 0 10px;
+				color: #6d6d6d;
+				text-indent: 2em;
+			}
+			
+			.user-title-footer {
+				text-align: left;
+				margin: 10px 10px 0;
+			}
+			
+			.ul-btn {
+				display: inline;
+				vertical-align: middle;
+				float: right;
+				height: 24px;
+				padding: 2px 12px;
+				background: #33CCFF;
+				color: #fff;
+				border: none;
+			}
+			
+			.ul-p {
+				width: 30%;
+				color: #00CFBD;
+				display: inline;
+				vertical-align: middle;
+				font-size: 13px;
+			}
+			
+			.ul-p-right {
+				width: 15%;
+				display: inline;
+				color: #00CFBD;
+				float: right;
+				vertical-align: middle;
+				font-size: 13px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#ffffff"></a>
+			<h1 class="mui-title" style="color: white;">套餐详情</h1>
+		</header>
+		<div class="mui-content">
+			<div id='orders'>
+				<div class="mui-row title-info">
+					<img v-cloak class="head-portrait" :src=orderDetail.busimg />
+					<p v-cloak class="user-title">{{orderDetail.cnname}}</p>
+					<p v-cloak class="user-title-body">{{orderDetail.busnote}}</p>
+					<div v-cloak class="user-title-footer">
+						<p class="ul-p">资费金额：{{orderDetail.feecode/100}}元/{{orderDetail.busmonth}}月</p>
+						<button class="ul-btn" class="mui-btn mui-btn-mini" onclick="placeOrder()">立即订购</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/vue.js"></script>
+		<!--加密-->
+		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
+		<script src='../../js/libs/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/libs/jquery.js'></script>
+		<script src="../../js/publicProtocolNew.js"></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/storageutil.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script>
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal********:' + JSON.stringify(personal));
+
+			mui.init();
+			var orders;
+			var curPageData;
+			mui.plusReady(function() {
+				orders.orderDetail = utils.getDataFromUrl(window.location.href);
+				orders.orderDetail.imgUrl = setImg(orders.orderDetail.imgUrl,1);
+			});
+
+			var orders = new Vue({
+				el: '#orders',
+				data: {
+					orderDetail: {}
+				}
+			});
+
+			//套餐订购
+			function placeOrder() {
+				utils.mOpenWithData("../../html/order/packageOrder_paymentPage_new.html", orders.orderDetail);
+			}
+		</script>
+	</body>
+
+</html>

@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="getui.permission.GetuiService.net.jiaobaowang.zhihuixiaoyuan" />
-
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <permission
         android:name="getui.permission.GetuiService.net.jiaobaowang.zhixueketang"
         android:protectionLevel="normal" />
@@ -79,6 +79,18 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="WX_APPID"
+            android:value="wxaa67faf962891155" />
+        <meta-data
+            android:name="WX_SECRET"
+            android:value="6c85231304ec24da84a98b8b464cbd5f" />
+
+        <activity android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <activity
             android:name="com.igexin.sdk.PushActivity"

@@ -1,41 +1,51 @@
 <!doctype html>
 <html>
 	<!--益测益学首页-->
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css" />
 		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
 			.mui-bar-nav {
 				z-index: 999;
 			}
+			
 			#header:after {
 				content: "";
 				position: absolute;
 				z-index: -1;
 				left: 0;
-			    right: 0;
-			    top: 0;
-			    bottom: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
 			}
+			
 			.mui-bar-tab {
 				height: 1rem;
 				background-color: #F9F9F4;
 			}
+			
 			.mui-bar-tab .mui-tab-item {
 				height: 1rem;
 			}
+			
 			.mui-bar-tab .mui-tab-item .mui-icon {
 				font-size: 0.44rem;
 				top: 0;
 				margin-bottom: 0.04rem;
 				pointer-events: none;
 			}
+			
 			.mui-bar-tab .mui-tab-item .mui-icon~.mui-tab-label {
 				font-size: 0.24rem;
 			}
+			
 			.label-wrapper .done-box {
 				display: inline-block;
 				width: 0.32rem;
@@ -49,16 +59,20 @@
 				top: 50%;
 				margin-top: -0.16rem;
 			}
+			
 			#subRadar {
 				min-height: 205px;
 				max-height: 440px;
 				padding-bottom: 0.6rem;
 			}
+			
 			#analysis {
 				max-height: 100%;
 				overflow-y: auto;
 			}
-			.mui-android .mui-table-view-cell:after, .mui-android .same-line-list:after {
+			
+			.mui-android .mui-table-view-cell:after,
+			.mui-android .same-line-list:after {
 				transform: none;
 				bottom: 1px;
 			}
@@ -69,96 +83,108 @@
 		<header id="header" class="mui-bar mui-bar-nav theme">
 			<h1 class="mui-title" style="color: white;">学情分析</h1>
 		</header>
-		
+
 		<div class="mui-content">
 			<!--学情分析-->
 			<div id="bl-analysis">
 				<div id="analysisTab">
-					<div class="als-title mui-text-center mui-ellipsis" v-cloak>{{user_name}}学情分析报告</div>
-					<div style="padding: .2rem .22rem .15rem;">学科均衡:</div>
-					<div id="subRadar"></div>
-					<ul class="mui-table-view als-list same-line-list" v-if="alsList.length" v-cloak>
-					    <li class="mui-table-view-cell" style="background-color: transparent;">
-					        <div class="sub">科目</div>
-					        <div class="times">学习次数</div>
-					        <div class="score">平均分/满分</div>
-					    </li>
-					    <li class="mui-table-view-cell navigate-right" v-for="(item, i) in alsList" @tap="goDetail(item)" :key="i">
-					    	<div class="sub">
-					    		<span class="label" v-if="item.remark==1">优势</span>
-					    		<span class="label bad" v-if="item.remark==-1">劣势</span>
-					    		{{item.subname}}
-					    	</div>
-					        <div class="times">{{item.count}}</div>
-					        <div class="score">{{item.avg_score}}分/100分</div>
-					    </li>
-					</ul>
-					<p v-else class="mui-text-center" v-show="isShowed">您还未提交过试题</p>
+					<div v-show="showFlag>0">
+						<div class="als-title mui-text-center mui-ellipsis" v-cloak>{{user_name}}学情分析报告</div>
+						<div style="padding: .2rem .22rem .15rem;">学科均衡:</div>
+						<div id="subRadar"></div>
+						<ul class="mui-table-view als-list same-line-list" v-if="alsList.length" v-cloak>
+							<li class="mui-table-view-cell" style="background-color: transparent;">
+								<div class="sub">科目</div>
+								<div class="times">学习次数</div>
+								<div class="score">平均分/满分</div>
+							</li>
+							<li class="mui-table-view-cell navigate-right" v-for="(item, i) in alsList" @tap="goDetail(item)" :key="i">
+								<div class="sub">
+									<span class="label" v-if="item.remark==1">优势</span>
+									<span class="label bad" v-if="item.remark==-1">劣势</span> {{item.subname}}
+								</div>
+								<div class="times">{{item.count}}</div>
+								<div class="score">{{item.avg_score}}分/100分</div>
+							</li>
+						</ul>
+						<p v-else class="mui-text-center" v-show="isShowed">您还未提交过试题</p>
+					</div>
+					<div v-show="showFlag==0">
+						<p style="text-align: center;margin-top: 5px;" v-cloak>{{noData}}</p>
+						<div v-cloak style="text-align: center;margin:10% auto;">
+							<img src="../../img/noData.png" style="width: 250px;" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<script src="../../js/mui.min.js"></script>
-		<script type="text/javascript" src="../../js/utils/vue.js" ></script>
-		<script type="text/javascript" src="../../js/libs/echarts.min.js" ></script>
+		<script type="text/javascript" src="../../js/utils/vue.js"></script>
+		<script type="text/javascript" src="../../js/libs/echarts.min.js"></script>
 		<script src='../../js/libs/jquery.js'></script>
 		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/storageKeyName.js"></script>
 		<script type="text/javascript" src="../../js/btlearn/common.js"></script>
-		<script type="text/javascript" src="../../js/utils/vconsole.min.js" ></script>
+		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
 		<script src="../../js/publicProtocolNew.js"></script>
 		<script type="text/javascript">
 			var self, bookMenuView, center, test_start;
-			
+
 			//认证信息
 			var userInfo = store.get(window.storageKeyName.PERSONALINFO);
 			var deviceParam = store.get(window.storageKeyName.PUBLICPARAMETER);
-			
-			var mask = mui.createMask(function(){
+
+			var mask = mui.createMask(function() {
 				header.showItem = false;
 			});
-			
+
 			mui.init();
-			
+
 			mui.plusReady(function() {
-				toChildPage("子页学情分析");
+				toChildPage("子页组卷测试");
+				
 				self = plus.webview.currentWebview();
 				//状态栏白色
-// 				if(plus.navigator.isImmersedStatusbar()){
-// 					plus.navigator.setStatusBarStyle('light');
-// 				}
-				
+				// 				if(plus.navigator.isImmersedStatusbar()){
+				// 					plus.navigator.setStatusBarStyle('light');
+				// 				}
+
 				// 刷新数据
-				window.addEventListener("refresh", function(e){
+				window.addEventListener("refresh", function(e) {
 					getAnalysisData();
 					var als_detail = plus.webview.getWebviewById('bl-analysis-detail');
 					als_detail && mui.fire(als_detail, "refresh");
 				});
+
 				
-				getAnalysisData();
-				
+
 				//双击退出
-// 				var backButtonPress = 0;
-// 				mui.back = function(event) {
-// 					backButtonPress++;
-// 					if(backButtonPress > 1) {
-// 						plus.runtime.quit();
-// 					} else {
-// 						plus.nativeUI.toast('再按一次退出应用');
-// 					}
-// 					setTimeout(function() {
-// 						backButtonPress = 0;
-// 					}, 1500);
-// 					return false;
-// 				};
+				// 				var backButtonPress = 0;
+				// 				mui.back = function(event) {
+				// 					backButtonPress++;
+				// 					if(backButtonPress > 1) {
+				// 						plus.runtime.quit();
+				// 					} else {
+				// 						plus.nativeUI.toast('再按一次退出应用');
+				// 					}
+				// 					setTimeout(function() {
+				// 						backButtonPress = 0;
+				// 					}, 1500);
+				// 					return false;
+				// 				};
 			});
-			
+
 			//学情分析
 			var subRadar;
 			var analysis = new Vue({
 				el: "#analysisTab",
 				data: {
+					showFlag: 0, //判断有没有订购套餐，进行显示九宫格，1正常显示，0显示的订购提醒
+					noData: '',
+					serverids:'',//此页面的套餐ids
+					percode:'',//学段id
 					user_name: "",
 					alsList: [],
 					isShowed: false
@@ -169,7 +195,7 @@
 				methods: {
 					goDetail: function(item) {
 						mui.openWindow({
-							url:"analysisDetail.html",
+							url: "analysisDetail.html",
 							id: "bl-analysis-detail",
 							extras: {
 								subcode: item.subcode,
@@ -179,12 +205,13 @@
 					}
 				}
 			});
-			
+
 			//获取分析数据
 			function getAnalysisData() {
 				plus.nativeUI.showWaiting();
 				commonAjax("/Ycyx/Analysis/index", {
-					success: function(res){
+					data:{percode:analysis.percode},
+					success: function(res) {
 						console.log(res.data);
 						var res_data = JSON.parse(res.data);
 						analysis.alsList = res_data.analysis;
@@ -200,77 +227,98 @@
 					}
 				});
 			}
-			
+
 			//生成雷达图
 			function getSubRadar() {
 				subRadar.resize();
-				var indicator = [], radar_value = [];
-				analysis.alsList.forEach(function(v){
-					indicator.push({name: v.subname, color: v.remark<0?"#DB4848":(v.remark>0?"#25AE38":"#222"), max: 100 });
+				var indicator = [],
+					radar_value = [];
+				analysis.alsList.forEach(function(v) {
+					indicator.push({
+						name: v.subname,
+						color: v.remark < 0 ? "#DB4848" : (v.remark > 0 ? "#25AE38" : "#222"),
+						max: 100
+					});
 					radar_value.push(v.avg_score);
 				});
-				if(!indicator.length||!radar_value.length) {
-					indicator = [{name:"科目", max: 100}];
+				if(!indicator.length || !radar_value.length) {
+					indicator = [{
+						name: "科目",
+						max: 100
+					}];
 					radar_value = [0];
 				}
 				subRadar.setOption({
-					radar:[
-						{
-							indicator: indicator,
-							name: {
-								color: "#222"
-							},
-							nameGap: 10,
-							center: ['50%', '50%'],
-							shape: "circle",
-							splitNumber: 4,
-							axisLine: {
-					            lineStyle: {
-					                color: '#A7A7A7'
-					            }
-					        },
-					        splitLine: {
-					            lineStyle: {
-					                color: '#A7A7A7'
-					            }
-					        },
-					        splitArea: {
-					            areaStyle: {
-					                color: ['none']
-					            }
-					        },
+					radar: [{
+						indicator: indicator,
+						name: {
+							color: "#222"
+						},
+						nameGap: 10,
+						center: ['50%', '50%'],
+						shape: "circle",
+						splitNumber: 4,
+						axisLine: {
+							lineStyle: {
+								color: '#A7A7A7'
+							}
+						},
+						splitLine: {
+							lineStyle: {
+								color: '#A7A7A7'
+							}
+						},
+						splitArea: {
+							areaStyle: {
+								color: ['none']
+							}
+						},
+					}],
+					series: [{
+						type: 'radar',
+						symbol: "circle",
+						symbolSize: 4,
+						data: [{
+							value: radar_value
+						}],
+						areaStyle: {
+							normal: {
+								opacity: 0.5,
+								color: "#4ACFC7"
+							}
+						},
+						lineStyle: {
+							width: 0
+						},
+						itemStyle: {
+							color: "#10A3A0"
 						}
-					],
-					series: [
-						{
-				            type: 'radar',
-				            symbol: "circle",
-				            symbolSize: 4,
-				            data: [
-				                {value: radar_value}
-				            ],
-				            areaStyle: {
-		                        normal: {
-		                            opacity: 0.5,
-		                            color: "#4ACFC7"
-		                        }
-		                   	},
-				            lineStyle: {
-				            	width: 0
-				            },
-				            itemStyle: {
-				            	color: "#10A3A0"
-				            }
-				        }
-					]
+					}]
 				});
 			}
-			
+
 			// analysis.alsList = [{"subname":"语文","count":52,"subcode":"01","remark":"-1","avg_score":14},{"subname":"语文","count":52,"subcode":"01","remark":"0","avg_score":14}];
-				//父——>子页传值方法
-			function toChildPage(text){
-				console.log(text)
-			}		
+			//父——>子页传值方法
+			function toChildPage(text) {
+				
+				var zj_percode=store.get(window.storageKeyName.ZJPERCODE);
+				console.log('zj_percode======='+zj_percode);
+				console.log(text);
+				var personalT = store.get(window.storageKeyName.PERSONALINFO);
+				if(personalT.userbus.length > 0) {
+					analysis.showFlag = 1;
+					if (personalT.userbus == analysis.serverids&&zj_percode == analysis.percode) {
+						
+					} else{
+						getAnalysisData();
+						analysis.serverids = personalT.userbus;
+						analysis.percode = zj_percode;
+					}
+				} else {
+					analysis.showFlag = 0;
+					analysis.noData = '您还没有订购套餐，请去个人中心设置';
+				}
+			}
 		</script>
 	</body>
 

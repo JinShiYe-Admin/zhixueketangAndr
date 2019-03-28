@@ -23,6 +23,8 @@ function setImg(imgURL,imgFlag) {
 	if(imgURL == null || imgURL.length == 0) {
 		if (imgFlag==1) {//订购默认图
 			tempUrl = '../../img/order.png';
+		}else if(imgFlag==9){
+			tempUrl = '../../img/login/headImg.png';
 		} else{
 			tempUrl = '../../img/noImgPerson.jpg';
 		}
