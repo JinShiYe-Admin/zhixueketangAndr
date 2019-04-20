@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 2; //0,开发;1,云测试；2正式
+	mod.key = 1; //0,开发;1,云测试；2正式
 	mod.pay = 0; //0,单个商家接口;1,多商家接口
 	var exLog = console.log;
 	console.log = function(hint, object) {
@@ -14,7 +14,7 @@ var storageKeyName = (function(mod) {
 			exLog.apply(this, [argus]);
 		}
 	}
-	switch(mod.key) {
+	switch(mod.key) {  
 		case 0: //开发
 			mod.SCHOOLID = 100005;//学校ID
 			mod.USERTYPE = 0;//用户类型，0老师,1家长,2学生

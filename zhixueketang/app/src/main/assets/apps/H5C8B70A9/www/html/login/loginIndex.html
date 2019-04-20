@@ -15,6 +15,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
 			<!--<a  class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>-->
+			<a id='register' style="color: white;" class="mui-btn-link mui-pull-right">注册</a>
 			<h1 class="mui-title" style="color: white;">登录</h1>
 		</header>
 		<div class="mui-content">
@@ -127,6 +128,10 @@
 			}
 		});
 
+		document.getElementById('register').addEventListener('tap', function() {
+			utils.mOpenWithData("../../html/login/register.html", {});
+		});
+
 		window.addEventListener('quit', function(data) {
 			console.log("data" + JSON.stringify(data.detail));
 			var tempData = data.detail;
@@ -178,7 +183,7 @@
 					//登录
 					postDataEncry('Login', enData1, comData1, 0, function(data1) {
 						events.closeWaiting();
-						if(data1.RspCode == 0) {   
+						if(data1.RspCode == 0) {
 							if(data1.RspData.utp == 1) {
 								if(data1.RspData.dpts == null) {
 									data1.RspData.dpts = [];
@@ -209,20 +214,20 @@
 								var personal = store.get(window.storageKeyName.PERSONALINFO);
 								console.log('personal000:' + JSON.stringify(personal));
 
-//								var info = plus.push.getClientInfo();
-//								var tempBindData = {
-//									appId: info.appid,
-//									alias: data1.RspData.utid,
-//									cid: info.clientid
-//								}
-//								bindPro(tempBindData, function function_name(data) {
-//									//									events.closeWaiting();
-//									if(data.RspCode == 0) {
-//										//										utils.mOpenWithData("../../index.html", {});
-//									} else {
-//										//											mui.toast(data.RspTxt);
-//									}
-//								});
+								//								var info = plus.push.getClientInfo();
+								//								var tempBindData = {
+								//									appId: info.appid,
+								//									alias: data1.RspData.utid,
+								//									cid: info.clientid
+								//								}
+								//								bindPro(tempBindData, function function_name(data) {
+								//									//									events.closeWaiting();
+								//									if(data.RspCode == 0) {
+								//										//										utils.mOpenWithData("../../index.html", {});
+								//									} else {
+								//										//											mui.toast(data.RspTxt);
+								//									}
+								//								});
 
 								//如果密码为1--6，让修改密码后，进入主界面
 								if(personal.password0 == '123456') {

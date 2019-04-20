@@ -200,7 +200,7 @@
 			function pullupRefresh() {
 				contentData.flag = 1;
 				//4.获取资源列表
-				getZiYuanList(); 
+				getZiYuanList();
 			}
 			//选择章节目录监听
 			window.addEventListener('selectCatalog', function(data) {
@@ -212,7 +212,7 @@
 				contentData.categoryArray = data.detail[1];
 				//教材
 				contentData.bookModel = data.detail[2]; //教材
-				mui('#contentData').pullRefresh().setStopped(false);//开启禁止滚动  
+				mui('#contentData').pullRefresh().setStopped(false); //开启禁止滚动  
 				//刷新数据
 				pulldownRefresh();
 			});
@@ -291,7 +291,7 @@
 
 			window.addEventListener('refush_count1', function() {
 				console.log('refush_count000');
-				mui('#contentData').pullRefresh().setStopped(false);//开启禁止滚动  
+				mui('#contentData').pullRefresh().setStopped(false); //开启禁止滚动  
 				//4.1.用户已订购套餐及功能扩展栏目
 				getUserBusFunc();
 			});
@@ -311,7 +311,7 @@
 					},
 					clickTitle: function() {
 						console.log('点击标题');
-						if(contentData.showFlag!=-1){
+						if(contentData.showFlag != -1) {
 							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
 						}
 					}
@@ -340,12 +340,14 @@
 							var tempArray = []; //判断是否有智学课堂套餐
 							for(var i = 0; i < data1.RspData.userbus.length; i++) {
 								var tempM = data1.RspData.userbus[i];
-								for(var a = 0; a < tempM.funcs.length; a++) {
-									var tempFuncs = tempM.funcs[a];
-									if(tempM.busext!=null && tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
-										tempArray.push(tempM.servid);
+								if(tempM.funcs != null && tempM.funcs != '') {
+									for(var a = 0; a < tempM.funcs.length; a++) {
+										var tempFuncs = tempM.funcs[a];
+										if(tempM.busext != null && tempFuncs.ftype == 'zxkt' && tempM.serstat == 1) {
+											tempArray.push(tempM.servid);
+										}
 									}
-								}  
+								}
 							}
 							personal.userbus = tempArray.join('|'); // 绑定的套餐
 							console.log(JSON.stringify(tempArray));
@@ -359,15 +361,22 @@
 								contentData.showFlag = -1;
 								tempHead.titleName = '请先订购套餐';
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
-								mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
-								setTimeout(function(){//初次进入首页如果没有资源，禁止刷新是不起作用的，需要延时1秒后再禁用
-									mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
-								},1000);
+								mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
+								setTimeout(function() { //初次进入首页如果没有资源，禁止刷新是不起作用的，需要延时1秒后再禁用
+									mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
+								}, 1000);
 							}
 						} else {
 							personal.userbus = ''; // 绑定的套餐
 							store.set(window.storageKeyName.PERSONALINFO, personal);
-							contentData.showFlag = 0;
+							//							contentData.showFlag = 0;
+							contentData.showFlag = -1;
+							tempHead.titleName = '请先订购套餐';
+							contentData.noData = '您还没有订购套餐，请去个人中心设置';
+							mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
+							setTimeout(function() { //初次进入首页如果没有资源，禁止刷新是不起作用的，需要延时1秒后再禁用
+								mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
+							}, 1000);
 						}
 					} else {
 						mui.toast(data1.RspTxt);
@@ -382,12 +391,12 @@
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
 					contentData.noData = '该目录下暂无资源，请切换目录';
-					mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+					mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
 					return 0
 				}
-				var firstPrd=catalogObj.prdList[0];
+				var firstPrd = catalogObj.prdList[0];
 				comData.percode = catalogObj.prdList[0].percode; //学段代码
-				comData.type=1;
+				comData.type = 1;
 				console.log('comData==' + JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
@@ -402,46 +411,46 @@
 							for(var i = 0; i < fence.length; i++) {
 								if(fence[i].fasccode == fcSelected) {
 									fence[i].ischeck = 1;
-								} else { 
+								} else {
 									fence[i].ischeck = 0;
 								}
-							} 
-							catalogObj.grdList = fence;  
-							    
-							if(firstPrd.subFlag==1){//需要与广西接口的科目列表合并，并去重
-								var orderSub=firstPrd.subList;//套餐里的科目列表
-								var sub= data.RspData.sub.list;//接口里的科目列表
-								var kmselected= data.RspData.sub.selected;
-								var subList=orderSub.concat(sub);//合并的科目列表
-								var newSubList=subList.length>0?subList.unique('subcode'):[];
+							}
+							catalogObj.grdList = fence;
+
+							if(firstPrd.subFlag == 1) { //需要与广西接口的科目列表合并，并去重
+								var orderSub = firstPrd.subList; //套餐里的科目列表
+								var sub = data.RspData.sub.list; //接口里的科目列表
+								var kmselected = data.RspData.sub.selected;
+								var subList = orderSub.concat(sub); //合并的科目列表
+								var newSubList = subList.length > 0 ? subList.unique('subcode') : [];
 								newSubList.sort(compare('subcode'));
 								for(var i = 0; i < newSubList.length; i++) {
-	                                if (newSubList[i].subcode==kmselected) {
-	                                    newSubList[i].ischeck = 1;
-	                                }else{
-	                                    newSubList[i].ischeck = 0;
-	                                } 
-	                            }
-								if(newSubList.length>0 &&JSON.stringify(newSubList).indexOf('ischeck:1')==-1){//如果广西接口传过来的默认勾选值与套餐中的科目勾选值不对应，则默认选中第一个科目
-									newSubList[0].ischeck=1;
+									if(newSubList[i].subcode == kmselected) {
+										newSubList[i].ischeck = 1;
+									} else {
+										newSubList[i].ischeck = 0;
+									}
 								}
-								catalogObj.subList=newSubList;
-								catalogObj.subFlag=1;   
-							}else{//不需要合并广西接口的科目列表
-								var orderSub=firstPrd.subList;
-								var kmselected= data.RspData.sub.selected;
+								if(newSubList.length > 0 && JSON.stringify(newSubList).indexOf('ischeck:1') == -1) { //如果广西接口传过来的默认勾选值与套餐中的科目勾选值不对应，则默认选中第一个科目
+									newSubList[0].ischeck = 1;
+								}
+								catalogObj.subList = newSubList;
+								catalogObj.subFlag = 1;
+							} else { //不需要合并广西接口的科目列表
+								var orderSub = firstPrd.subList;
+								var kmselected = data.RspData.sub.selected;
 								for(var i = 0; i < orderSub.length; i++) {
-	                                if (orderSub[i].subcode==kmselected) {
-	                                    orderSub[i].ischeck = 1;
-	                                }else{
-	                                    orderSub[i].ischeck = 0;
-	                                }
-	                            }
-								if(orderSub.length>0 &&JSON.stringify(orderSub).indexOf('ischeck:1')==-1){
-									orderSub[0].ischeck=1;
-								} 
-							    catalogObj.subList=orderSub;
-							    catalogObj.subFlag=0;
+									if(orderSub[i].subcode == kmselected) {
+										orderSub[i].ischeck = 1;
+									} else {
+										orderSub[i].ischeck = 0;
+									}
+								}
+								if(orderSub.length > 0 && JSON.stringify(orderSub).indexOf('ischeck:1') == -1) {
+									orderSub[0].ischeck = 1;
+								}
+								catalogObj.subList = orderSub;
+								catalogObj.subFlag = 0;
 							}
 							//教版
 							var mater = data.RspData.mater.list;
@@ -453,7 +462,7 @@
 									mater[i].ischeck = 0;
 								}
 							}
-							catalogObj.materList = mater; 
+							catalogObj.materList = mater;
 							//将获取到的学段、年级、科目保存起来
 							store.set(window.storageKeyName.CATALOG, catalogObj);
 							store.set(window.storageKeyName.ZJPERCODE, catalogObj.prdList[0].percode);
@@ -462,7 +471,7 @@
 								contentData.showFlag = 0;
 								tempHead.titleName = '请切换目录';
 								contentData.noData = '该目录下暂无资源，请切换目录';
-								mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+								mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
 								return 0
 							}
 							//得到学段、年级、科目后，分别取第一个默认值，得到教材编号
@@ -478,7 +487,7 @@
 			var getTextBook = function(catalogObj) {
 				var comData = {}
 				comData.percode = catalogObj.prdList[0].percode; //学段代码，取默认第一个 可选
-				if(catalogObj.subList.length > 0 && catalogObj.materList.length > 0 && catalogObj.grdList.length > 0) {//如果科目和学段都不为空的话，取默认第一个
+				if(catalogObj.subList.length > 0 && catalogObj.materList.length > 0 && catalogObj.grdList.length > 0) { //如果科目和学段都不为空的话，取默认第一个
 					comData.subcode = catalogObj.subList[0].subcode; //科目代码
 					comData.matercode = catalogObj.materList[0].matercode; //科目代码
 					comData.fasccode = catalogObj.grdList[0].fasccode; //分册（年级），取默认第一个代码 可选
@@ -486,10 +495,10 @@
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
 					contentData.noData = '该目录下暂无资源，请切换目录';
-					mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+					mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
 					return 0
 				}
-				comData.type=1;
+				comData.type = 1;
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
 					wd.close();
@@ -534,7 +543,7 @@
 							contentData.showFlag = 0;
 							tempHead.titleName = '请切换目录';
 							contentData.noData = '该目录下暂无资源，请切换目录';
-							mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+							mui('#contentData').pullRefresh().setStopped(true); //暂时禁止滚动  
 							return 0;
 						}
 						//根据教材获取资源(分页) 
@@ -617,6 +626,12 @@
 				mask.close();
 				menu.hide();
 				showMenu = false;
+				var wvs = plus.webview.getDisplayWebview();
+				for(var i = 0; i < wvs.length; i++) {
+					wvs[i].setStyle({
+						mask: "none"
+					});
+				}
 			});
 			/**
 			 * 显示菜单菜单
@@ -781,6 +796,14 @@
 				methods: {
 					clickResourceModel: function(model) {
 						console.log('点击li：' + JSON.stringify(model));
+						var deadline = getQueryString(model.openFileUrl).e; //得到当前文件过期时间 时间戳
+						var timestamp = Math.round(new Date().getTime() / 1000).toString(); //得到当前时间戳
+						if(timestamp - deadline > 0) { //过期
+							mui.toast('当前文件已过期，请刷新列表重试！')
+							return 0;
+							//TODO 重新获取token
+							//							DownloadUrl = 'https://developer.qiniu.com/kodo/manual/1202/download-token'
+						}
 						if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 							mui.toast('网络异常，请检查网络设置！');
 							return;
@@ -876,6 +899,26 @@
 			slider.slider({
 				interval: 5000
 			});
+
+			function getQueryString(url) {
+				try {
+					var theRequest = new Object();
+					if(url.indexOf("?") != -1) {
+						var str = url.split('?')[1];
+						strs = str.split("&");
+						for(var i = 0; i < strs.length; i++) {
+							theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+						}
+					}
+					return theRequest;
+				} catch(e) {
+					console.error('对userbus字段进行学段去重时发生异常,' + e);
+					console.error('====================')
+					console.error(e.stack);
+					console.error('====================')
+					return {};
+				}
+			}
 		</script>
 	</body>
 
